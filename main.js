@@ -20,19 +20,19 @@ function hangMan() {
         underscore.push('_');
     }
     console.log('Guess the word!')
-    let letter = readlineSync.question(underscore.join(' ') + '\nGuess: ').toLowerCase()
-    while (attempt != 1) {
-        if (letter == 'quit') {
+    while (attempt != 0) {
+        let letter = readlineSync.question(underscore.join(' ') + '\nGuess: ').toLowerCase();
+        if (letter == 'quit') { // added this so I can stop the code without completing the game
             break;
         }
         if (guesses.includes(letter)) {
-            console.log('You have already guessed that letter.');
+            console.log('You have already guessed that letter.\tAttempts left: ' + attempt);
             console.log('guesses: [ ' + guesses.join(' ') + ' ]');
         }
         else {
             if (word.includes(letter)) {
                 let indexes = getIndex(word, letter);
-                for (let index of indexes) {
+                for (let index of indexes) { // adding correct letter to the underscores if correct
                     underscore.splice(index, 1, letter)
                 }
             }
@@ -40,21 +40,20 @@ function hangMan() {
                 attempt--;
                 console.log('Wrong!\t\tAttempts left: ' + attempt);
             }
-            if (underscore.join('') === word) {
+            if (underscore.join('') === word) { // winning scenario
+                console.log('\nYou win!');
                 console.log('Answer: ' + word);
-                console.log('You win!');
                 break;
             }
             guesses.push(letter);
         }
-            letter = readlineSync.question(underscore.join(' ') + '\nGuess: ').toLowerCase();
     }
     if (underscore.join('') != word) {
-        console.log('You lose');
+        console.log('\nYou lose');
         console.log('Answer: ' + word)
     }
     let again = readlineSync.question('Do you wanna play again?\n').toLowerCase();
-    if (again === 'yes') {
+    if (again === 'yes') { // for looping the game
         hangMan();
     }
     return;
